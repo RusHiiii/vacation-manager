@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Demande de congés{% endblock %}
+
+{% block content %}
+<h2>Demande de congés</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Valider</button>
+</form>
+
+<a href="{% url 'home' %}">Retour</a>
+{% endblock %}

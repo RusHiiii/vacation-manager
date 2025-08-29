@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load month_name %}
+{% load math_filters %}
+{% load tz %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<a href="{% url 'parameters' %}">Parametrage</a>
+<a href="{% url 'holiday_request' %}">Demande de congés</a>
+
+{% if user.is_authenticated %}
+Hi {{ user.username }}!
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Log Out</button>
+</form>
+{% else %}
+<p>You are not logged in</p>
+<a href="{% url 'login' %}">Log In</a>
+{% endif %}
+
+{% if parameters %}
+<ul>
+    <li>Nombre de congé au 1er janvier : {{ parameters.start_holiday_amount }}</li>
+    <li>Nombre de congé par mois : {{ parameters.holiday_per_month }}</li>
+    <li>Nombre de RTT (année N) : {{ parameters.extra_holiday_current_year }}</li>
+    <li>Nombre de RTT (année N + 1) : {{ parameters.extra_holiday_next_year }}</li>
+</ul>
+{% endif %}
+
+<a href="{% url 'home' %}?year=CURRENT">Année N</a>
+<a href="{% url 'home' %}?year=NEXT">Année N + 1</a>
+
+<div>Année {{ target_year }}</div>
+
+    {% for holiday in calculated_holidays %}
+        {% if year_query == 'CURRENT' and holiday.month_number < 12 or year_query == 'NEXT' and holiday.month_number >= 12 %}
+        <ul>
+            <li>Mois : {{ holiday.month_number|mod:12|add:1|month_name }}</li>
+            <li>Jour posé : {{ holiday.used|floatformat:2 }}</li>
+            <li>Cumulé : {{ holiday.cumulated|floatformat:2 }}</li>
+            <li>Restant : {{ holiday.remaining|floatformat:2 }}</li>
+        </ul>
+        {% endif %}
+    {% endfor %}
+
+
+
+{% endblock %}
+
