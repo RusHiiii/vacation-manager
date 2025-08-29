@@ -7,6 +7,10 @@ let
 in
 {
   languages = {
+    javascript = {
+      enable = true;
+      package = pkgs.nodejs_20;
+    };
     python = {
       enable = true;
       version = "3.11";
@@ -51,4 +55,9 @@ in
     exec = "python vacation_manager/manage.py runserver";
     process-compose.depends_on.postgres.condition = "process_healthy";
   };
+
+  processes.tailwind = {
+    exec = "python vacation_manager/manage.py tailwind start";
+    process-compose.depends_on.postgres.condition = "process_healthy";
+    };
 }

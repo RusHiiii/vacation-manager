@@ -19,7 +19,7 @@ from django.urls import path, include
 from holidays import views
 
 urlpatterns = [
-    path('parameters/', views.parameters, name='parameters'),
-    path('holiday_request/', views.holiday_request, name='holiday_request'),
-    path('', views.home, name='home'),
+  path('parameters/', views.parameters, name='parameters'),
+  path('holiday_request/', views.holiday_request, name='holiday_request'),
+  path('', views.home, name='home'),
 ]
