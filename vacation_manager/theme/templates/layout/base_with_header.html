@@ -1,0 +1,66 @@
+{% load tailwind_tags %}
+{% load static %}
+{% load form_tags %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Vacation Manager</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>{% block title %}Gestionnaire de congés{% endblock %}</title>
+    {% tailwind_css %}
+</head>
+
+<body class="bg-red-50 text-black leading-normal tracking-normal font-lato">
+
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex flex-col">
+
+    <!-- Header / Menu -->
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto flex items-center justify-between p-4">
+
+            <div class="flex items-center pr-6">
+                <div class="flex items-center">
+                    <a href="{% url 'home' %}">
+                        <img src="{% static 'img/logo.svg' %}" alt="Logo" class="w-60 h-24">
+                    </a>
+                </div>
+                <div class="h-12 border-r border-gray-300 ml-4"></div> <!-- barre verticale plus courte -->
+            </div>
+
+            <!-- Menu onglets principaux à droite du logo avec petite séparation -->
+            <nav class="flex items-center space-x-6 ml-6">
+                <a href="{% url 'home' %}" class="text-gray-700 font-medium hover:text-blue-600 border-b-2 border-transparent hover:border-blue-500 h-full flex items-center transition-colors">Accueil</a>
+                <a href="{% url 'holiday_request' %}" class="text-gray-700 font-medium hover:text-blue-600 border-b-2 border-transparent hover:border-blue-500 h-full flex items-center transition-colors">Demandes de congés</a>
+                <a href="{% url 'parameters' %}" class="text-gray-700 font-medium hover:text-blue-600 border-b-2 border-transparent hover:border-blue-500 h-full flex items-center transition-colors">Paramètres</a>
+            </nav>
+
+            <!-- Spacer pour pousser le menu utilisateur à droite -->
+            <div class="flex-grow"></div>
+
+            <!-- Utilisateur / Déconnexion à droite -->
+            <div class="flex items-center space-x-4">
+                {% if user.is_authenticated %}
+                <span class="text-gray-700 font-medium">Bonjour, <span class="font-bold">{{ user.username }}</span></span>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors" type="submit">Me déconnecter</button>
+                </form>
+
+                {% else %}
+                <a href="{% url 'login' %}" class="text-blue-600 font-medium hover:underline">Connexion</a>
+                <a href="{% url 'signup' %}" class="text-blue-600 font-medium hover:underline">S'inscrire</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+</body>
+
+</html>
