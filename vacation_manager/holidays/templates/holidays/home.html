@@ -7,63 +7,79 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-6 flex flex-col space-y-6">
+<main class="flex-grow flex items-center justify-center">
+    <div class="w-full max-w-7xl flex flex-col space-y-6 px-4 p-8 mt-8">
 
-    <!-- Partie 1 : Paramétrages -->
-    {% if parameters %}
-    <section class="bg-white rounded-xl shadow p-6">
-        <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Paramétrages</h2>
-        <div class="grid grid-cols-2 gap-4 text-gray-700">
-            <div>Nombre de congé au 1er janvier :</div>
-            <div class="font-semibold">{{ parameters.start_holiday_amount }}</div>
+        <!-- Partie 1 : Paramétrages -->
+        {% if parameters %}
+        <section class="bg-white rounded-2xl shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Paramétrages</h2>
+            <div class="grid grid-cols-2 gap-4 text-gray-700">
+                <div>Nombre de congé au 1er janvier :</div>
+                <div class="font-semibold text-gray-800">{{ parameters.start_holiday_amount }}</div>
 
-            <div>Nombre de congé par mois :</div>
-            <div class="font-semibold">{{ parameters.holiday_per_month }}</div>
+                <div>Nombre de congé par mois :</div>
+                <div class="font-semibold text-gray-800">{{ parameters.holiday_per_month }}</div>
 
-            <div>Nombre de RTT (année N) :</div>
-            <div class="font-semibold">{{ parameters.extra_holiday_current_year }}</div>
+                <div>Nombre de RTT (année N) :</div>
+                <div class="font-semibold text-gray-800">{{ parameters.extra_holiday_current_year }}</div>
 
-            <div>Nombre de RTT (année N + 1) :</div>
-            <div class="font-semibold">{{ parameters.extra_holiday_next_year }}</div>
-        </div>
-    </section>
-    {% endif %}
+                <div>Nombre de RTT (année N + 1) :</div>
+                <div class="font-semibold text-gray-800">{{ parameters.extra_holiday_next_year }}</div>
+            </div>
+        </section>
+        {% endif %}
 
-    <!-- Partie 2 : Congés par mois -->
-    <section class="bg-white rounded-xl shadow p-6">
-        <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Suivi des congés pour {{ target_year }}</h2>
+        <!-- Partie 2 : Congés par mois -->
+        <section class="bg-white rounded-2xl shadow-md p-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 border-b pb-2">
+                <h2 class="text-xl font-bold text-gray-800 mb-2 sm:mb-0">Suivi des congés pour {{ target_year }}</h2>
+                <a href="{% url 'holiday_request' %}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                    Demande de congé
+                </a>
+            </div>
 
-        <!-- Sélecteur d'année -->
-        <div class="flex space-x-4 items-center mb-4">
-            <a href="{% url 'home' %}?year=CURRENT" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Année N</a>
-            <a href="{% url 'home' %}?year=NEXT" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Année N + 1</a>
-        </div>
+            <!-- Sélecteur d'année -->
+            <div class="flex space-x-4 items-center mb-6">
+                <a href="{% url 'home' %}?year=CURRENT" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Année N</a>
+                <a href="{% url 'home' %}?year=NEXT" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Année N + 1</a>
+            </div>
 
-        <div class="overflow-x-auto">
-            <table class="min-w-full text-center border border-gray-200 rounded-lg overflow-hidden">
-                <thead class="bg-blue-100 text-gray-700">
-                <tr>
-                    <th class="px-4 py-3">Mois</th>
-                    <th class="px-4 py-3">Jours posés</th>
-                    <th class="px-4 py-3">Cumulé</th>
-                    <th class="px-4 py-3">Restant</th>
-                </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
+            <!-- Cartes des mois -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {% for holiday in calculated_holidays %}
                 {% if year_query == 'CURRENT' and holiday.month_number < 12 or year_query == 'NEXT' and holiday.month_number >= 12 %}
-                <tr class="odd:bg-gray-50 hover:bg-blue-50 transition-colors">
-                    <td class="px-4 py-2">{{ holiday.month_number|mod:12|add:1|month_name|title }}</td>
-                    <td class="px-4 py-2">{{ holiday.used|floatformat:2 }}</td>
-                    <td class="px-4 py-2">{{ holiday.cumulated|floatformat:2 }}</td>
-                    <td class="px-4 py-2">{{ holiday.remaining|floatformat:2 }}</td>
-                </tr>
+
+                <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow transform hover:-translate-y-1">
+                    <div class="bg-blue-100 text-blue-900 text-center font-semibold py-2 text-lg">
+                        {{ holiday.month_number|mod:12|add:1|month_name|title }}
+                    </div>
+
+                    <div class="p-4 space-y-3 text-gray-700">
+                        <div class="flex justify-between">
+                            <span class="flex items-center space-x-1">🗓 Jours posés</span>
+                            <span class="font-semibold text-gray-800">{{ holiday.used|floatformat:2 }}</span>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <span class="flex items-center space-x-1">📈 Cumulé</span>
+                            <span class="font-semibold text-gray-800">{{ holiday.cumulated|floatformat:2 }}</span>
+                        </div>
+
+                        <div class="flex justify-between">
+                            <span class="flex items-center space-x-1">⚖ Restant</span>
+                            <span class="font-semibold {% if holiday.remaining <= 3 %}text-red-600{% elif holiday.remaining <= 7 %}text-yellow-600{% else %}text-green-600{% endif %}">
+                                {{ holiday.remaining|floatformat:2 }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
                 {% endif %}
                 {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
-</div>
+            </div>
+        </section>
+    </div>
+</main>
 {% endblock %}
 
