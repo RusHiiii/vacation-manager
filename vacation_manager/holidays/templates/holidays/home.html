@@ -7,47 +7,63 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 p-6 flex flex-col space-y-6">
 
-<a href="{% url 'parameters' %}">Parametrage</a>
-<a href="{% url 'holiday_request' %}">Demande de congés</a>
+    <!-- Partie 1 : Paramétrages -->
+    {% if parameters %}
+    <section class="bg-white rounded-xl shadow p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Paramétrages</h2>
+        <div class="grid grid-cols-2 gap-4 text-gray-700">
+            <div>Nombre de congé au 1er janvier :</div>
+            <div class="font-semibold">{{ parameters.start_holiday_amount }}</div>
 
-{% if user.is_authenticated %}
-Hi {{ user.username }}!
-<form action="{% url 'logout' %}" method="post">
-    {% csrf_token %}
-    <button type="submit">Log Out</button>
-</form>
-{% else %}
-<p>You are not logged in</p>
-<a href="{% url 'login' %}">Log In</a>
-{% endif %}
+            <div>Nombre de congé par mois :</div>
+            <div class="font-semibold">{{ parameters.holiday_per_month }}</div>
 
-{% if parameters %}
-<ul>
-    <li>Nombre de congé au 1er janvier : {{ parameters.start_holiday_amount }}</li>
-    <li>Nombre de congé par mois : {{ parameters.holiday_per_month }}</li>
-    <li>Nombre de RTT (année N) : {{ parameters.extra_holiday_current_year }}</li>
-    <li>Nombre de RTT (année N + 1) : {{ parameters.extra_holiday_next_year }}</li>
-</ul>
-{% endif %}
+            <div>Nombre de RTT (année N) :</div>
+            <div class="font-semibold">{{ parameters.extra_holiday_current_year }}</div>
 
-<a href="{% url 'home' %}?year=CURRENT">Année N</a>
-<a href="{% url 'home' %}?year=NEXT">Année N + 1</a>
+            <div>Nombre de RTT (année N + 1) :</div>
+            <div class="font-semibold">{{ parameters.extra_holiday_next_year }}</div>
+        </div>
+    </section>
+    {% endif %}
 
-<div>Année {{ target_year }}</div>
+    <!-- Partie 2 : Congés par mois -->
+    <section class="bg-white rounded-xl shadow p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Suivi des congés pour {{ target_year }}</h2>
 
-    {% for holiday in calculated_holidays %}
-        {% if year_query == 'CURRENT' and holiday.month_number < 12 or year_query == 'NEXT' and holiday.month_number >= 12 %}
-        <ul>
-            <li>Mois : {{ holiday.month_number|mod:12|add:1|month_name }}</li>
-            <li>Jour posé : {{ holiday.used|floatformat:2 }}</li>
-            <li>Cumulé : {{ holiday.cumulated|floatformat:2 }}</li>
-            <li>Restant : {{ holiday.remaining|floatformat:2 }}</li>
-        </ul>
-        {% endif %}
-    {% endfor %}
+        <!-- Sélecteur d'année -->
+        <div class="flex space-x-4 items-center mb-4">
+            <a href="{% url 'home' %}?year=CURRENT" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Année N</a>
+            <a href="{% url 'home' %}?year=NEXT" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Année N + 1</a>
+        </div>
 
-
-
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-center border border-gray-200 rounded-lg overflow-hidden">
+                <thead class="bg-blue-100 text-gray-700">
+                <tr>
+                    <th class="px-4 py-3">Mois</th>
+                    <th class="px-4 py-3">Jours posés</th>
+                    <th class="px-4 py-3">Cumulé</th>
+                    <th class="px-4 py-3">Restant</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                {% for holiday in calculated_holidays %}
+                {% if year_query == 'CURRENT' and holiday.month_number < 12 or year_query == 'NEXT' and holiday.month_number >= 12 %}
+                <tr class="odd:bg-gray-50 hover:bg-blue-50 transition-colors">
+                    <td class="px-4 py-2">{{ holiday.month_number|mod:12|add:1|month_name|title }}</td>
+                    <td class="px-4 py-2">{{ holiday.used|floatformat:2 }}</td>
+                    <td class="px-4 py-2">{{ holiday.cumulated|floatformat:2 }}</td>
+                    <td class="px-4 py-2">{{ holiday.remaining|floatformat:2 }}</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
 {% endblock %}
 
