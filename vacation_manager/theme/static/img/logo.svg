@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="500" height="120" viewBox="0 0 400 120">
     <!-- Calendrier -->
-    <rect x="20" y="20" width="90" height="70" rx="10" ry="10" fill="#0f172a"/>
-    <rect x="20" y="10" width="90" height="20" rx="5" ry="5" fill="#0f172a"/>
+    <rect x="20" y="20" width="90" height="70" rx="10" ry="10" fill="#1e2939"/>
+    <rect x="20" y="10" width="90" height="20" rx="5" ry="5" fill="#1e2939"/>
     <!-- Attaches -->
     <circle cx="40" cy="10" r="5" fill="#ffffff"/>
     <circle cx="90" cy="10" r="5" fill="#ffffff"/>
@@ -15,7 +15,7 @@
     </g>
 
     <!-- Texte sur une ligne, plus petit -->
-    <text x="130" y="65" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600" fill="#0f172a">
+    <text x="130" y="65" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600" fill="#1e2939">
         Vacation Manager
     </text>
 </svg>
