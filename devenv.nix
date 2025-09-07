@@ -46,9 +46,12 @@ in
   };
 
   env = {
-    DATABASE_URL = "postgres://${db_user}:${db_pass}@127.0.0.1/${db_name}";
-    DEBUG = "true";
+    DJANGO_DEBUG = "true";
     STATIC_ROOT = "${config.devenv.state}/static";
+    DATABASE_USERNAME = "${db_user}";
+    DATABASE_PASSWORD = "${db_pass}";
+    DATABASE_HOST = "127.0.0.1";
+    DATABASE_PORT = "5432";
   };
 
   processes.runserver = {

@@ -5,6 +5,7 @@ class ParameterForm(forms.ModelForm):
   start_holiday_amount = forms.FloatField(max_value=100, label="Solde initial de congés")
   extra_holiday_current_year = forms.FloatField(min_value=0, max_value=20, label="Congés supplémentaires cette année")
   extra_holiday_next_year = forms.FloatField(min_value=0, max_value=20, label="Congés supplémentaires l'année prochaine")
+  extra_holiday_month_accumulation = forms.BooleanField(label="Accumulation mensuel", required=False)
   holiday_per_month = forms.FloatField(min_value=0, max_value=6, label="Congés acquis par mois")
 
   class Meta:

@@ -30,10 +30,19 @@ def home(request):
   for holiday in holidays:
     is_next_year = holiday.month_number >= 12
 
-    # Prise en compte des RTT N ou N + 1
-    extra_holiday = parameters.extra_holiday_next_year if is_next_year else parameters.extra_holiday_current_year
+    if parameters.extra_holiday_month_accumulation:
+      # Prise en compte des RTT N ou N + 1
+      extra_holiday = parameters.extra_holiday_next_year if is_next_year else parameters.extra_holiday_current_year
 
-    monthly_increment = (extra_holiday / 12) + parameters.holiday_per_month
+      monthly_increment = (extra_holiday / 12) + parameters.holiday_per_month
+    else:
+      extra_holiday = (
+        parameters.extra_holiday_current_year if holiday.month_number == 0
+        else parameters.extra_holiday_next_year if holiday.month_number == 12
+        else 0
+      )
+
+      monthly_increment = parameters.holiday_per_month + extra_holiday
 
     remaining_holidays += monthly_increment - holiday.used
 
