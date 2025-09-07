@@ -1,0 +1,48 @@
+services:
+    db:
+        image: postgres:17
+        container_name: django-db
+        environment:
+            POSTGRES_DB: ${DATABASE_NAME}
+            POSTGRES_USER: ${DATABASE_USERNAME}
+            POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        env_file:
+            - .env
+
+    nginx:
+        build:
+            context: .
+            dockerfile: docker/nginx/Dockerfile
+        ports:
+            - "8080:80"
+        volumes:
+            - static_files:/app/vacation_manager/static
+        depends_on:
+            - django-web
+
+    django-web:
+        build:
+            context: .
+            dockerfile: docker/app/Dockerfile
+        container_name: django-web
+        volumes:
+            - static_files:/app/vacation_manager/static
+        depends_on:
+            - db
+        environment:
+            DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+            DJANGO_DEBUG: ${DJANGO_DEBUG}
+            DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL}
+            DATABASE_USERNAME: ${DATABASE_USERNAME}
+            DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+            DATABASE_HOST: ${DATABASE_HOST}
+            DATABASE_PORT: ${DATABASE_PORT}
+        env_file:
+            - .env
+volumes:
+    postgres_data:
+    static_files:
