@@ -38,8 +38,7 @@ CSRF_TRUSTED_ORIGINS = [
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "https://vacances.fldamiens.fr",
-    "http://vacances.fldamiens.fr"
+    "vacances.fldamiens.fr"
 ]
 
 # Application definition
