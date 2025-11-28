@@ -22,10 +22,10 @@ jobs:
 
             - name: Build Docker image
               run: |
-                  IMAGE_NAME=ghcr.io/${{ github.repository }}/vacation-manager:latest
+                  IMAGE_NAME=ghcr.io/rushiiii/vacation-manager:latest
                   docker build -t $IMAGE_NAME .
 
             - name: Push Docker image
               run: |
-                  IMAGE_NAME=ghcr.io/${{ github.repository }}/vacation-manager:latest
+                  IMAGE_NAME=ghcr.io/rushiiii/vacation-manager:latest
                   docker push $IMAGE_NAME
