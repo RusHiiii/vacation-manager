@@ -13,3 +13,4 @@ devenv.local.nix
 
 # env vars
 .env
+.env.production
