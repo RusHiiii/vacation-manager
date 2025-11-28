@@ -30,12 +30,15 @@ DEBUG = (os.environ.get('DJANGO_DEBUG') == 'True')
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:8080",
+    "https://vacances.fldamiens.fr",
+    "http://vacances.fldamiens.fr"
 ]
 
 # Assurez-vous que votre domaine est dans ALLOWED_HOSTS
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
+    "vacances.fldamiens.fr"
 ]
 
 # Application definition
