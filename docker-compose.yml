@@ -13,7 +13,8 @@ services:
         env_file:
             - .env
 
-    nginx:
+    django-nginx:
+        image: ghcr.io/rushiiii/vacation-manager-nginx:latest
         build:
             context: .
             dockerfile: docker/nginx/Dockerfile
@@ -25,6 +26,7 @@ services:
             - django-web
 
     django-web:
+        image: ghcr.io/rushiiii/vacation-manager-web:latest
         build:
             context: .
             dockerfile: docker/app/Dockerfile

@@ -21,11 +21,10 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Build Docker image
-              run: |
-                  IMAGE_NAME=ghcr.io/rushiiii/vacation-manager:latest
-                  docker compose build -t $IMAGE_NAME .
+              run:
+                  docker compose build
 
             - name: Push Docker image
               run: |
-                  IMAGE_NAME=ghcr.io/rushiiii/vacation-manager:latest
-                  docker push $IMAGE_NAME
+                 docker push ghcr.io/rushiiii/vacation-manager-web:latest
+                 docker push ghcr.io/rushiiii/vacation-manager-nginx:latest
