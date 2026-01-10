@@ -166,6 +166,9 @@ docker compose down
 docker compose down --volumes
 docker compose up --build --force-recreate
 
+# Lancer les conteneur en mode détaché
+docker compose up -d
+
 # Accéder au shell Django
 docker compose exec django-web bash
 ```
