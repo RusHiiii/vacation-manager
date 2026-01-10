@@ -19,6 +19,7 @@ services:
             context: .
             dockerfile: docker/nginx/Dockerfile
         container_name: django-nginx
+        pull_policy: always
         ports:
             - "8080:80"
         volumes:
@@ -32,6 +33,7 @@ services:
             context: .
             dockerfile: docker/app/Dockerfile
         container_name: django-web
+        pull_policy: always
         volumes:
             - static_files:/app/vacation_manager/static
         depends_on:
