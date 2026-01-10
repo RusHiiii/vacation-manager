@@ -15,46 +15,81 @@
     {% tailwind_css %}
 </head>
 
-<body class="bg-red-50 text-black leading-normal tracking-normal font-lato">
+<body class="text-black leading-normal tracking-normal font-lato">
 
 <div class="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex flex-col">
 
     <!-- Header / Menu -->
     <header class="bg-white shadow-md">
-        <div class="container mx-auto flex items-center justify-between">
+        <input type="checkbox" id="menu-toggle" class="hidden">
 
-            <div class="flex items-center pr-6">
+        <div class="menu-container container mx-auto px-4">
+            <div class="flex items-center justify-between py-2">
+                <!-- Logo -->
                 <div class="flex items-center">
                     <a href="{% url 'home' %}">
-                        <img src="{% static 'img/logo.svg' %}" alt="Logo" class="w-60 h-24">
+                        <img src="{% static 'img/logo.svg' %}" alt="Logo" class="w-40 h-16 md:w-60 md:h-24">
                     </a>
                 </div>
-                <div class="h-12 border-r border-gray-300 ml-4"></div> <!-- barre verticale plus courte -->
+
+                <!-- Hamburger button (mobile) -->
+                <label for="menu-toggle" class="md:hidden text-gray-700 hover:text-blue-600 cursor-pointer z-10">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path class="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        <path class="close-icon hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </label>
+
+                <!-- Desktop menu -->
+                <div class="hidden md:flex items-center flex-1 ml-6">
+                    <div class="h-12 border-r border-gray-300 mr-6"></div>
+
+                    <!-- Navigation links -->
+                    <nav class="flex items-center space-x-4 lg:space-x-6">
+                        <a href="{% url 'home' %}" class="text-gray-700 text-sm lg:text-base font-medium hover:text-blue-600 border-b-2 border-transparent hover:border-blue-500 flex items-center transition-colors py-2 whitespace-nowrap">Accueil</a>
+                        <a href="{% url 'holiday_request' %}" class="text-gray-700 text-sm lg:text-base font-medium hover:text-blue-600 border-b-2 border-transparent hover:border-blue-500 flex items-center transition-colors py-2 whitespace-nowrap">Demandes</a>
+                        <a href="{% url 'parameters' %}" class="text-gray-700 text-sm lg:text-base font-medium hover:text-blue-600 border-b-2 border-transparent hover:border-blue-500 flex items-center transition-colors py-2 whitespace-nowrap">Paramètres</a>
+                    </nav>
+
+                    <!-- Spacer -->
+                    <div class="flex-grow"></div>
+
+                    <!-- User menu -->
+                    <div class="flex items-center space-x-2 lg:space-x-4">
+                        {% if user.is_authenticated %}
+                        <span class="text-gray-700 text-sm lg:text-base font-medium hidden lg:inline whitespace-nowrap">Bonjour, <span class="font-bold">{{ user.username }}</span></span>
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button class="bg-gray-600 text-white px-3 py-2 text-sm lg:px-4 lg:text-base rounded hover:bg-gray-700 transition-colors whitespace-nowrap" type="submit">Déconnexion</button>
+                        </form>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="text-blue-600 font-medium hover:underline">Connexion</a>
+                        <a href="{% url 'signup' %}" class="text-blue-600 font-medium hover:underline">S'inscrire</a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
 
-            <!-- Menu onglets principaux à droite du logo avec petite séparation -->
-            <nav class="flex items-center space-x-6 ml-6">
-                <a href="{% url 'home' %}" class="text-gray-700 font-medium hover:text-blue-600 border-b-2 border-transparent hover:border-blue-500 h-full flex items-center transition-colors">Accueil</a>
-                <a href="{% url 'holiday_request' %}" class="text-gray-700 font-medium hover:text-blue-600 border-b-2 border-transparent hover:border-blue-500 h-full flex items-center transition-colors">Demandes de congés</a>
-                <a href="{% url 'parameters' %}" class="text-gray-700 font-medium hover:text-blue-600 border-b-2 border-transparent hover:border-blue-500 h-full flex items-center transition-colors">Paramètres</a>
-            </nav>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden pb-4 md:hidden">
+                <nav class="flex flex-col space-y-2">
+                    <a href="{% url 'home' %}" class="text-gray-700 font-medium hover:text-blue-600 hover:bg-blue-50 px-4 py-3 rounded transition-colors">Accueil</a>
+                    <a href="{% url 'holiday_request' %}" class="text-gray-700 font-medium hover:text-blue-600 hover:bg-blue-50 px-4 py-3 rounded transition-colors">Demandes de congés</a>
+                    <a href="{% url 'parameters' %}" class="text-gray-700 font-medium hover:text-blue-600 hover:bg-blue-50 px-4 py-3 rounded transition-colors">Paramètres</a>
 
-            <!-- Spacer pour pousser le menu utilisateur à droite -->
-            <div class="flex-grow"></div>
+                    <div class="border-t border-gray-200 my-2"></div>
 
-            <!-- Utilisateur / Déconnexion à droite -->
-            <div class="flex items-center space-x-4">
-                {% if user.is_authenticated %}
-                <span class="text-gray-700 font-medium">Bonjour, <span class="font-bold">{{ user.username }}</span></span>
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors" type="submit">Me déconnecter</button>
-                </form>
-
-                {% else %}
-                <a href="{% url 'login' %}" class="text-blue-600 font-medium hover:underline">Connexion</a>
-                <a href="{% url 'signup' %}" class="text-blue-600 font-medium hover:underline">S'inscrire</a>
-                {% endif %}
+                    {% if user.is_authenticated %}
+                    <div class="px-4 py-2 text-gray-700 font-medium">Bonjour, <span class="font-bold">{{ user.username }}</span></div>
+                    <form method="post" action="{% url 'logout' %}" class="px-4">
+                        {% csrf_token %}
+                        <button class="w-full bg-gray-600 text-white px-4 py-3 rounded hover:bg-gray-700 transition-colors" type="submit">Me déconnecter</button>
+                    </form>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="text-blue-600 font-medium hover:bg-blue-50 px-4 py-3 rounded">Connexion</a>
+                    <a href="{% url 'signup' %}" class="text-blue-600 font-medium hover:bg-blue-50 px-4 py-3 rounded">S'inscrire</a>
+                    {% endif %}
+                </nav>
             </div>
         </div>
     </header>

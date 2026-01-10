@@ -8,3 +8,16 @@
   * the scope of this path.
   */
 @source "../../../**/*.{html,py,js}";
+
+/* Menu responsive - CSS only toggle */
+#menu-toggle:checked ~ .menu-container #mobile-menu {
+    display: block;
+}
+
+#menu-toggle:checked + label .menu-icon {
+    display: none;
+}
+
+#menu-toggle:checked + label .close-icon {
+    display: block;
+}

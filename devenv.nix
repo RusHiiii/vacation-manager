@@ -46,7 +46,7 @@ in
   };
 
   env = {
-    DJANGO_DEBUG = "true";
+    DJANGO_DEBUG = "True";
     STATIC_ROOT = "${config.devenv.state}/static";
     DATABASE_USERNAME = "${db_user}";
     DATABASE_PASSWORD = "${db_pass}";
