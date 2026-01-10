@@ -18,6 +18,7 @@ services:
         build:
             context: .
             dockerfile: docker/nginx/Dockerfile
+        container_name: django-nginx
         ports:
             - "8080:80"
         volumes:
